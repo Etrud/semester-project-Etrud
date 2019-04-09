@@ -4,16 +4,42 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "EMPLOYEE", schema = "PUBLIC", catalog = "PROJECT")
-public class Employee{
+public class Employee {
     private int id;
     private String lastName;
     private String firstName;
-    private String email;
     private String phone;
+    private String email;
+
+    /**
+     * Returns a string representation of the object. In general, the
+     * {@code toString} method returns a string that
+     * "textually represents" this object. The result should
+     * be a concise but informative representation that is easy for a
+     * person to read.
+     * It is recommended that all subclasses override this method.
+     * <p>
+     * The {@code toString} method for class {@code Object}
+     * returns a string consisting of the name of the class of which the
+     * object is an instance, the at-sign character `{@code @}', and
+     * the unsigned hexadecimal representation of the hash code of the
+     * object. In other words, this method returns a string equal to the
+     * value of:
+     * <blockquote>
+     * <pre>
+     * getClass().getName() + '@' + Integer.toHexString(hashCode())
+     * </pre></blockquote>
+     *
+     * @return a string representation of the object.
+     */
+    @Override
+    public String toString() {
+        return String.format("%s %s", firstName, lastName);
+    }
 
     @Id
-    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID", nullable = false)
     public int getId() {
         return id;
     }
@@ -23,7 +49,7 @@ public class Employee{
     }
 
     @Basic
-    @Column(name = "LAST_NAME")
+    @Column(name = "LAST_NAME", nullable = false, length = 24)
     public String getLastName() {
         return lastName;
     }
@@ -32,8 +58,22 @@ public class Employee{
         this.lastName = lastName;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return id == employee.id &&
+                Objects.equals(lastName, employee.lastName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, lastName);
+    }
+
     @Basic
-    @Column(name = "FIRST_NAME")
+    @Column(name = "FIRST_NAME", nullable = false, length = 24)
     public String getFirstName() {
         return firstName;
     }
@@ -42,23 +82,18 @@ public class Employee{
         this.firstName = firstName;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Employee that = (Employee) o;
-        return id == that.id &&
-                Objects.equals(lastName, that.lastName) &&
-                Objects.equals(firstName, that.firstName);
+    @Basic
+    @Column(name = "PHONE", nullable = false, length = 24)
+    public String getPhone() {
+        return phone;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, lastName, firstName);
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    @Id
-    @Column(name = "EMAIL")
+    @Basic
+    @Column(name = "EMAIL", nullable = false, length = 24)
     public String getEmail() {
         return email;
     }
@@ -67,13 +102,4 @@ public class Employee{
         this.email = email;
     }
 
-    @Basic
-    @Column(name = "PHONE")
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
 }

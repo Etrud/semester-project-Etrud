@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -37,7 +36,7 @@ public class Main extends Application {
      *
      * <p>
      * NOTE: This method is not called on the JavaFX Application Thread. An
-     * application must not construct a Scene or a Stage in this
+     * application must not construct a Scene or a JobStage in this
      * method.
      * An application may construct other JavaFX objects in this method.
      * </p>
@@ -51,9 +50,6 @@ public class Main extends Application {
         fxmlLoader.setControllerFactory(springContext::getBean);
         root = fxmlLoader.load();
         super.init();
-
-        springContext.getAutowireCapableBeanFactory().autowireBean(this);
-
     }
 
 
@@ -73,13 +69,9 @@ public class Main extends Application {
      *                     primary stages and will not be embedded in the browser.
      * @throws Exception if something goes wrong
      */
-
-
-
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setScene(new Scene(root,300,300));
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
-
     }
 }

@@ -1,11 +1,8 @@
 package edu.uh.tech.cis3368.semesterproject;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-
-public interface EmployeeRepository extends CrudRepository<Employee,Integer> {
-
-
-    public ArrayList<Employee> findEmployeeByEmail(String email);
+@Repository
+public interface EmployeeRepository extends JpaRepository<Employee,Integer> {
 }

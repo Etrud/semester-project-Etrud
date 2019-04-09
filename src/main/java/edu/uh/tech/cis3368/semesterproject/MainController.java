@@ -1,33 +1,59 @@
 package edu.uh.tech.cis3368.semesterproject;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.util.ArrayList;
+import java.io.IOException;
 
 
 @Component
 public class MainController {
 
-    private EmployeeRepository employeeRepository;
+    @FXML
+    private Button btnManageEmployees;
+    @FXML
+    private Button btnCreateProduct;
 
-    public void deleteEmployee(String email){
+    @Autowired
+    private ConfigurableApplicationContext applicationContext;
 
-        ArrayList<Employee> employeeArrayList = employeeRepository.findEmployeeByEmail(email);
-        employeeArrayList.forEach(employeeRepository::delete);
+    public void doManageEmployees(ActionEvent actionEvent) throws IOException {
+        Stage parent  = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("employees.fxml"));
+        fxmlLoader.setControllerFactory(applicationContext::getBean);
+        Scene scene = new Scene(fxmlLoader.load());
+        EmployeeController employeeController = fxmlLoader.getController();
+        employeeController.setReturnScene(btnManageEmployees.getScene());
+        parent.setScene(scene);
+
+
     }
 
-    public void addEmployee(String first,String last,String email,String phone)
-    {
-         employeeRepository.hashCode();
-         Employee employee = new Employee();
-         employee.setLastName(last);
-         employee.setFirstName(first);
-         employee.setEmail(email);
-         employee.setPhone(phone);
-         employeeRepository.save(employee);
+    public void doCreateJobs(ActionEvent actionEvent) throws IOException {
+        Stage parent  = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("jobs.fxml"));
+        fxmlLoader.setControllerFactory(applicationContext::getBean);
+        Scene scene = new Scene(fxmlLoader.load());
+        JobController jobController = fxmlLoader.getController();
+        jobController.setReturnScene(btnManageEmployees.getScene());
+        parent.setScene(scene);
     }
 
-    public void changeEmployee() {}
+    public void doCreateProduct(ActionEvent actionEvent) throws  IOException {
+        Stage parent  = (Stage) ((Node)actionEvent.getSource()).getScene().getWindow();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("products.fxml"));
+        fxmlLoader.setControllerFactory(applicationContext::getBean);
+        Scene scene = new Scene(fxmlLoader.load());
+        ProductController productController = fxmlLoader.getController();
+        productController.setReturnScene(btnCreateProduct.getScene());
+        parent.setScene(scene);
+    }
 }
